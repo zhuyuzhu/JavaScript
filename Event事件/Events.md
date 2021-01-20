@@ -6,11 +6,15 @@
 bubbles: true    是否冒泡
 cancelBubble: false  是否取消了冒泡
 cancelable: true    是否取消了对该对象的该事件的监听
+type：事件类型
+path：该元素的元素路径
+target：事件源对象
+defaultPrevented：返回一个布尔值，表明当前事件是否调用了 event.preventDefault()方法。
 ```
 
 阻止默认行为：event.preventDefault()
 
-取消事件冒泡：
+取消事件冒泡：event.cancelBubble = true 或 event.stopPropagation()    propagation传播、繁殖
 
 #### 一、页面加载时的事件和页面卸载时的事件
 
