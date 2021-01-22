@@ -210,7 +210,11 @@ card.addEventListener('dblclick', function (e) {
 </script>
 ```
 
-#### 3、mousedown和mouseup事件 兼容性IE9
+### mouse事件
+
+
+
+#### 1、mousedown和mouseup事件 兼容性IE9
 
 **mousedown**
 
@@ -230,7 +234,7 @@ https://developer.mozilla.org/en-US/docs/Web/API/Element/mouseup_event
 
 
 
-#### 4、mouseenter和mouseleave事件  兼容性IE5.5  不冒泡
+#### 2、mouseenter和mouseleave事件  兼容性IE5.5  不冒泡
 
 **mouseenter  鼠标移入元素**
 
@@ -250,7 +254,7 @@ https://developer.mozilla.org/en-US/docs/Web/API/Element/mouseleave_event
 
 由于不冒泡，当鼠标移入或移出 父元素的可见视图时，才会触发mouseenter和mouseleave事件。
 
-#### 5、mouseover和mouseout  mousemove事件  兼容性IE9  冒泡
+#### 3、mouseover和mouseout  mousemove事件  兼容性IE9  冒泡
 
 **mouseover鼠标移至**
 
@@ -276,7 +280,7 @@ https://developer.mozilla.org/en-US/docs/Web/API/Element/mousemove_event
 
 
 
-#### 6、contextmenu事件  兼容性IE9 冒泡
+#### 4、contextmenu事件  兼容性IE9 冒泡
 
 当用户试图打开上下文菜单时，触发contextmenu事件。此事件通常由单击鼠标右键或按下上下文菜单键触发。在后一种情况下，上下文菜单显示在焦点元素的左下角，除非元素是树，在这种情况下，上下文菜单显示在当前行的左下角。
 
@@ -285,3 +289,106 @@ https://developer.mozilla.org/en-US/docs/Web/API/Element/mousemove_event
 
 
 https://developer.mozilla.org/en-US/docs/Web/API/Element/contextmenu_event
+
+
+
+#### 5、滚轮事件WheelEvent 兼容性IE9
+
+**WheelEvent** 接口表示用户滚动鼠标滚轮或类似输入设备时触发的事件。
+
+API接口继承：WheelEvent——MouseEvent——UIEvent——Event
+
+**属性：**该API接口继承了父接口的属性
+
+[`WheelEvent.deltaX`](https://developer.mozilla.org/zh-CN/docs/Web/API/WheelEvent/deltaX) 只读
+
+返回`double`值，该值表示滚轮的横向滚动量。
+
+[`WheelEvent.deltaY`](https://developer.mozilla.org/zh-CN/docs/Web/API/WheelEvent/deltaY) 只读
+
+返回`double`值，该值表示滚轮的纵向滚动量。
+
+[`WheelEvent.deltaZ`](https://developer.mozilla.org/zh-CN/docs/Web/API/WheelEvent/deltaZ) 只读
+
+返回`double`值，该值表示滚轮的z轴方向上的滚动量。
+
+**方法：**WheelEvent本身没有新增方法，方法继承他的父接口。
+
+https://developer.mozilla.org/zh-CN/docs/Web/API/WheelEvent
+
+#### wheel 滚轮事件
+
+当用户旋转指向设备(通常是鼠标)上的滚轮按钮时，将触发滚轮事件。
+
+此事件取代了非标准的弃用mousewheel事件。
+
+**注意：**不要混淆`滚轮事件wheel`和`滚动事件scroll`。wheel事件的默认操作是特定于实现的，并不需要分派滚动事件。即使如此，wheel事件中的delta值也不一定反映内容的滚动方向。因此，不要依赖wheel事件的delta*属性来获取滚动方向。相反，在滚动事件中检测目标的scrollLeft和scrollTop值的变化。
+
+**注意事项：** 请勿想当然依据滚轮方向（即该事件的各delta属性值）来推断文档内容的滚动方向，因标准未定义滚轮事件具体会引发什么样的行为，引发的行为实际上是各浏览器自行定义的。即便滚轮事件引发了文档内容的滚动行为，也不表示滚轮方向和文档内容的滚动方向一定相同。因而通过该滚轮事件获知文档内容滚动方向的方法并不可靠。要获取文档内容的滚动方向，可在文档内容滚动事件（`scroll`）中监视[`scrollLeft`](https://developer.mozilla.org/zh-CN/docs/Web/API/Element/scrollLeft)和[`scrollTop`](https://developer.mozilla.org/zh-CN/docs/Web/API/Element/scrollTop)二值变化情况，即可推断出滚动方向了。
+
+MDN中文文档写的比较详细，具体的请查看该文档。。（未完待续）
+
+https://developer.mozilla.org/zh-CN/docs/Web/API/Element/wheel_event
+
+示例：滚轮缩放元素
+
+注意：Internet Explorer仅通过addEventListener暴露wheel事件；DOM对象上没有onwheel属性。
+
+
+
+#### scroll 滚动事件 兼容性IE9
+
+文档视图或者一个元素在滚动时，会触发元素的**`scroll`**事件。
+
+**注意：**在 iOS UIWebViews中， 滚动进行时不会触发 `scroll` 事件；只有当滚动结束后事件才会被触发。参见 [Bootstrap issue #16202](https://github.com/twbs/bootstrap/issues/16202)。Safari 和 WKWebViews 则没有这个问题。
+
+
+
+scroll事件节流：
+
+由于 `scroll` 事件可被高频触发，事件处理程序不应该执行高性能消耗的操作，如DOM操作。而更推荐的做法是使用 [`requestAnimationFrame()`](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestAnimationFrame), [`setTimeout()`](https://developer.mozilla.org/zh-CN/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout) 或 [`CustomEvent`](https://developer.mozilla.org/zh-CN/docs/Web/API/CustomEvent) 给事件节流，如下所述。
+
+然而需要注意的是，输入事件和动画帧常常以差不多的频率被触发，因此以下优化常常不必要。这个例子使用 `requestAnimationFrame` 优化 `scroll` 事件。
+
+```js
+// 参见: http://www.html5rocks.com/en/tutorials/speed/animations/
+
+let last_known_scroll_position = 0;
+let ticking = false;
+
+function doSomething(scroll_pos) {
+  // 根据滚动位置做的事
+}
+
+window.addEventListener('scroll', function(e) {
+  last_known_scroll_position = window.scrollY;
+
+  if (!ticking) {
+    window.requestAnimationFrame(function() {
+      doSomething(last_known_scroll_position);
+      ticking = false;
+    });
+
+    ticking = true;
+  }
+});
+```
+
+
+
+关于事件节流：在 `resize` 事件页面中查看更多类似的例子。
+
+https://developer.mozilla.org/zh-CN/docs/Web/API/Document/scroll_event
+
+
+
+### 额外补充：
+
+1、window.scroll 窗口的滚动方法
+
+滚动窗口至文档中的特定位置。
+
+https://developer.mozilla.org/zh-CN/docs/Web/API/Window/scroll
+
+2、[window.scrollTo](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/scrollTo) 实际上和该方法是相同的。想要重复地滚动某个距离，请使用 [window.scrollBy](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/scrollBy).
+
