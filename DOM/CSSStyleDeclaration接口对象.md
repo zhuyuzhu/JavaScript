@@ -1,4 +1,4 @@
-# CSSStyleDeclaration接口对象
+# CSSStyleDeclaration接口对象——CSS样式声明
 
 
 
