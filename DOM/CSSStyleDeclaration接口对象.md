@@ -253,9 +253,9 @@ https://developer.mozilla.org/zh-CN/docs/Web/API/CSSStyleSheet
 
 **1、document.styleSheets 得到类数组对象StyleSheetList（样式层叠表）**
 
-document文档上获取到的所有所有样式表。——css文件和html中head标签内的style标签的样式。样式表的先后顺序按css文件加载的顺序。
+**document文档上获取到的所有所有样式表。——css文件和html中head标签内的style标签的样式。样式表的先后顺序按css文件加载的顺序。**
 
-
+**注意：不把元素上style的样式作为样式表。**
 
 ```js
 0: CSSStyleSheet {ownerRule: null, cssRules: CSSRuleList, rules: CSSRuleList, type: "text/css", href: "https://172.16.87.22/meeting/static/css/common/common.css?t=6.0.4.3215493057", …}
@@ -302,11 +302,7 @@ cssRules 和 rules  是该css文件中所有的css样式选择器的集合。每
 
 **document.styleSheets[0] 获取第一个CSS文件**
 
-**document.styleSheets[0].cssRules[0] 获取CSS文件中的第一个样式选择器**
 
-
-
-**注意：无法修改伪元素的content值，但可以修改font-size、color、等值**
 
 示例：
 
@@ -336,13 +332,19 @@ cssRules 和 rules  是该css文件中所有的css样式选择器的集合。每
     </script>
 ```
 
-获取的某个class样式对象：
+#### 样式选择器对象
 
-> cssText 该选择器的文本
+——**document.styleSheets[0].cssRules[0] 获取CSS文件中的第一个样式选择器对象**
+
+以下是样式选择器对象的几个重要的属性：
+
+> cssText: "p::after { content: "$"; font-size: 20px; }"
 >
-> selectorText 选择器的名称
+> selectorText: "p::after"
 >
-> style  该选择器的样式属性及值
+> style: CSSStyleDeclaration{}
+
+
 
 ```js
 cssText: "p::after { content: "$"; font-size: 20px; }"
@@ -353,6 +355,10 @@ style: CSSStyleDeclaration {0: "content", 1: "font-size", alignContent: "", alig
 styleMap: StylePropertyMap {size: 2}
 type: 1
 ```
+
+#### 修改伪元素的样式的途径
+
+**——注意：无法修改伪元素的content值，但可以修改font-size、color、等值**。
 
 
 
@@ -452,8 +458,6 @@ getComputedStyle 可以从**伪元素**拉取样式信息 (比如, `::after`, `:
 </script>
 ```
 
-根据window.getComputedStyle方法得到的CSSStyleDeclaration对象的setProperty方法，修改伪元素的样式
-
 
 
 ### 注意：
@@ -482,7 +486,7 @@ HTMLElement.style对象和window.getComputedStyle对象获取的都是**`CSSStyl
 let domP = document.getElementsByTagName('p')[0]
 let styleObj = window.getComputedStyle(domP, '::after');
 console.log(styleObj.content) //只读不能修改
-styleObj.style.setProperty('margin', '1px 2px')
+styleObj.setProperty('margin', '1px 2px')
 // 可以通过dom的style获取的CSSStyleDeclaration对象来的setProperty方法来修改样式
 domP.style.setProperty('font-size', '20px');
 ```
