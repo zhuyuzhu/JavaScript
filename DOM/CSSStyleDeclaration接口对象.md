@@ -202,15 +202,47 @@ item()方法接口通过索引从CSSStyleDeclaration中返回一个CSS属性名�
 
 ### 一、HTMLElement.style 兼容性IE5.5
 
-`HTMLElement.style` 属性返回一个 [`CSSStyleDeclaration`](https://developer.mozilla.org/zh-US/docs/DOM/CSSStyleDeclaration) 对象，表示元素的 内联[`style` 属性（attribute）](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Global_attributes#style)，但忽略任何样式表应用的属性。
+`HTMLElement.style` 属性返回一个对象，该对象上的索引属性，表示元素的内联样式已经设置的值；还有其他未设置的css样式属性。且该对象继承CSSStyleDeclaration对象，可以继承使用CSSStyleDeclaration对象上的方法和属性。
+
+比如 ：
+
+```html
+<div id="wrapper" style="color: aqua; width: 200px; ">
+    <p>1212</p>
+</div>
+<script>
+    var domWrap = document.getElementById('wrapper');
+	console.log(domWrap.style)
+</script>
+```
+
+打印结果：
+
+#### 即索引属性展示style设置的值；接着是所有的CSS属性，没设置的为空字符串，设置值的是对应的值；最后原型是CSSStyleDeclaration对象；
+
+> 0: "color"
+>
+> 1: "width"
+>
+> 2: "height"
+>
+> backgroundColor: ""
+>
+> bottom: ""
+>
+> color: "aqua"
+>
+> cssText: "color: aqua; width: 200px; height: 200px;"
+
+
 
 通过 `style` 可以访问的 CSS 属性列表，可以查看 [CSS Properties Reference](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Properties_Reference)。
 
-由于 `style` 属性的优先级和通过style设置内联样式是一样的，并且在css层级样式中拥有最高优先级，因此在为特定的元素设置样式时很有用。——即通过js设置HTMLElement.style属性和元素标签的内联样式style属性是一样的。
+由于 `style` 属性的优先级和通过style设置内联样式是一样的，并且在css层级样式中拥有最高优先级，因此在为特定的元素设置样式时很有用。**——即通过js设置HTMLElement.style属性和元素标签的内联样式style属性是一样的。通过HTMLElement.style.setProperty()方法设置的属性也是在style上。**
 
 
 
-注意**不能**通过直接给style属性设置字符串（如：elt.style = "color: blue;"）来设置style，因为style应被当成是只读的（尽管Firefox(Gecko), Chrome 和 Opera允许修改它），这是因为通过style属性返回的`CSSStyleDeclaration`对象是只读的。
+注意：**不能**通过直接给style属性设置字符串（如：elt.style = "color: blue;"）来设置style，因为style应被当成是只读的（尽管Firefox(Gecko), Chrome 和 Opera允许修改它），这是因为通过style属性返回的`CSSStyleDeclaration`对象是只读的。
 
 但是style属性本身的属性**能**够用来设置样式。此外，通过单独的样式属性（如`elt.style.color = '...'`）比用`elt.style.cssText = '...' 或者 elt.setAttribute('style', '...')形式更加简便，除非你希望完全通过一个单独语句来设置元素的全部样式，因为通过style本身属性设置的样式不会影响到通过其他方式设置的其他css属性的样式。
 
@@ -219,6 +251,8 @@ item()方法接口通过索引从CSSStyleDeclaration中返回一个CSS属性名�
 （1）HTMLElement.style得到的是CSSStyleDeclaration接口对象，继承该接口对象上的所有属性和方法
 
 （2）HTMLElement.style对象上有各个属性，可以直接修改设置该属性的值。比如：color、font-size 、width、等等。
+
+
 
 （3）可以通过dom的setAttribute方法，设置style属性的值。从而修改style属性。
 
