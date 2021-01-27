@@ -14,6 +14,10 @@ https://developer.mozilla.org/zh-CN/docs/Web/API/CSSStyleDeclaration
 - [`CSSStyleSheet`](https://developer.mozilla.org/zh-CN/docs/Web/API/CSSStyleSheet) API，举个例子，`document.styleSheets[0].cssRules[0].style` 会返回文档中第一个样式表中的第一条 CSS 规则。
 - [`Window.getComputedStyle()`](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/getComputedStyle)，将 `CSSStyleDeclaration` 对象作为一个**只读**的接口。
 
+#### style的重要性：
+
+**三种方式，都是操作style，不过第三种是计算好的style。**
+
 
 
 **对应的属性和方法：属性和方法都被上面三个对象继承**
@@ -68,6 +72,16 @@ CSSStyleDeclaration接口的cssText属性只返回或设置元素的内联样式
 ```
 
 输出的结果：important
+
+#### 关于important权重
+
+**获取：**其他方式都无法获取属性值时，无法获取到important，除非用cssText，获取整个css对象文本。
+
+**设置：**能否设置css属性时，设置权重？
+
+设置css属性时，无法设置权重值。
+
+
 
 **4、getPropertyValue()** 
 
