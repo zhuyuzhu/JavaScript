@@ -154,9 +154,15 @@ mouseout：鼠标移出该元素或其子元素时
 
 https://developer.mozilla.org/zh-CN/docs/Web/API/Element/mouseout_event
 
+
+
+
+
 wheel：滚轮事件，当滚动鼠标滚轮或操作其它类似输入设备时会触发**滚轮事件**。滚轮事件替换了已被弃用的非标准[`mousewheel`](https://developer.mozilla.org/zh-CN/docs/Web/API/Mousewheel)事件。
 
 拖放事件：最好还是用插件，compatibility还可以啊
+
+
 
 drag：当元素或者选择的文本被拖动时触发 `drag` 事件 (每几百毫秒触发一次)。在此过程中持续触发，每350ms触发一次
 
@@ -192,6 +198,8 @@ https://developer.mozilla.org/en-US/docs/Web/API/Document/dragover_event
 
 #### 三、CSS事件
 
+
+
 #### 四、表单事件
 
 submit：当表单提交的时候触发submit事件。注意submit事件只能作用于form元素，不能作用于button或者<input type="submit">
@@ -223,6 +231,8 @@ focusout
 
 
 媒体事件——音视频
+
+
 
 进度条事件——上传下载资源
 

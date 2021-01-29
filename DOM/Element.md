@@ -409,33 +409,162 @@ https://developer.mozilla.org/zh-CN/docs/Web/API/ParentNode/children
 
 ### 四、元素标签滚动
 
+**兼容IE6。兼容性良好**
+
+#### 关于滚动条：——可视区（不可填充区、可填充区）
+
+让我们回想元素盒模型，父元素的盒模型中的content区是用来存放子元素的。如果子元素的盒模型（包括margin，margin也是盒模型的一部分），**子元素盒（子元素不止一个）模型以父元素的初始content区位置开始**，溢出父元素的可视区的可填充区（可能由于子元素的margin使得子元素溢出父元素的可视区可填充区），那么父元素就会产生滚动条。（父元素的伪元素，也算作子元素）
+
+关于子元素盒模型的溢出：子元素是按父元素的content区左上角为初始位置。
+
+垂直方向：子元素的margin-top向上撑开，margin-bottom向下撑开，与父元素的padding-top没有关系。定义一个新的概念：父元素不可填充区——padding-top，父元素可填充区——content区+padding-bottom区（如果有横向滚动条，还要减去滚动条的宽度）
+
+一个元素产生滚动条，是因为子元素盒模型溢出父元素的可填充区。使得父元素产生了滚动条，而滚动条是占用父元素自身的宽高。滚动条会占据父元素的可视区，使得可视区减少。
+
 #### 1、滚动属性
 
 
 
-**Element.scrollTop** 属性可以获取或设置一个元素的内容垂直滚动的像素数。
+**（1）Element.scrollTop** 属性可以获取或设置一个元素的内容垂直滚动的像素数。**即父元素内容滚动的距离。**
 
-**`Element.scrollLeft`** 属性可以读取或设置元素滚动条到元素左边的距离。
+兼容性IE5
+
+一个元素的scrollTop值是该元素顶部到最上面可见内容的距离的度量值。
+
+`scrollTop` 可以被设置为任何整数值，同时注意：
+
+- 如果一个元素不能被滚动（例如，它没有溢出，或者这个元素有一个"**non-scrollable"**属性）， `scrollTop`将被设置为`0`。
+- 设置`scrollTop`的值小于0，`scrollTop` 被设为`0`
+- 如果设置了超出这个容器可滚动的值, `scrollTop` 会被设为最大值。
+
+https://developer.mozilla.org/zh-CN/docs/Web/API/Element/scrollTop
+
+**注意：设置和获取的值都是整数数字或整数字符串，没有单位。比如：`200`或  `"200"`**
+
+**（2）Element.scrollLeft** 属性可以读取或设置元素滚动条到元素左边的距离。
 
 注意如果这个元素的内容排列方向（[`direction`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/direction)） 是`rtl` (right-to-left) ，那么滚动条会位于最右侧（内容开始处），并且`scrollLeft`值为0。此时，当你从右到左拖动滚动条时，scrollLeft会从0变为负数。
 
-**`Element.scrollHeight`** 这个只读属性是一个元素内容高度的度量，包括由于溢出导致的视图中不可见内容。
+`scrollLeft` 可以是任意整数，然而：
 
-`scrollHeight `的值等于该元素在不使用滚动条的情况下为了适应视口中所用内容所需的最小高度。 没有垂直滚动条的情况下，scrollHeight值与元素视图填充所有内容所需要的最小值[`clientHeight`](https://developer.mozilla.org/zh-CN/docs/Web/API/Element/clientHeight)相同。包括元素的padding，但不包括元素的border和margin。scrollHeight也包括 [`::before`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::before) 和 [`::after`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::after)这样的伪元素。
+- 如果元素不能滚动（比如：元素没有溢出），那么`scrollLeft` 的值是0。
+- 如果给`scrollLeft` 设置的值小于0，那么`scrollLeft` 的值将变为0。
+- 如果给`scrollLeft` 设置的值大于元素内容最大宽度，那么`scrollLeft` 的值将被设为元素最大宽度。
 
-**`Element.scrollWidth`** 这个只读属性是元素内容宽度的一种度量，包括由于overflow溢出而在屏幕上不可见的内容。
+https://developer.mozilla.org/zh-CN/docs/Web/API/Element/scrollLeft
+
+
+
+**由上面两个属性可见：**
+
+横向或者纵向滚动，可以使用scrollLeft或scrollTop，以left边或者top边设置或获取滚动距离。但是如果元素内容的排列方式是（right-to-left）那么就是以右边开始排序，且横向滚动值也是以右边为起始值。
+
+也就是说scrollTop是不受影响的。下面看看（right-to-left）情况下的scrollLeft：——什么情况下会是right-to-left呢？
+
+
+
+
+
+**（3）Element.scrollHeight** ——内容的高度，包括溢出和隐藏部分
+
+这个**只读属性**，是一个元素内容高度的度量，包括由于溢出导致的视图中不可见内容，以及溢出产生的滚动的内容。
+
+`scrollHeight `的值等于该元素在不使用滚动条的情况下为了适应视口中所用内容所需的最小高度。
+
+scrollHeight也包括 [`::before`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::before) 和 [`::after`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::after)这样的伪元素。包括元素的padding，但不包括元素的border和margin。
+
+ 没有垂直滚动条的情况下，scrollHeight值与元素视图填充所有内容所需要的最小值[`clientHeight`](https://developer.mozilla.org/zh-CN/docs/Web/API/Element/clientHeight)相同。
+
+
+
+
+
+**示例：注意结果没有单位，是数值。**
+
+```html
+   <style>
+    div.wrap {
+        height: 200px;
+        width: 200px;
+        /* overflow: auto; */
+        overflow: hidden;
+    }
+    div.child {
+        height: 200px;
+        width: 500px;
+        background-image: linear-gradient(180deg, blue, green);
+        padding-right: 50px;
+        padding-top: 50px;
+    }
+	</style>
+
+	<div class="wrap">
+        <div class="child"></div>
+    </div>
+      
+    <script>
+        var wrap = document.getElementsByClassName('wrap')[0]
+        var child = document.getElementsByClassName('child')[0]
+        console.log(wrap.scrollHeight, wrap.scrollWidth); // 250  550
+    </script>
+```
+
+
+
+**（4）Element.scrollWidth** 
+
+这个只读属性是元素内容宽度的一种度量，包括由于overflow溢出而在屏幕上不可见的内容。
 
 `scrollWidth`值等于元素在不使用水平滚动条的情况下适合视口中的所有内容所需的最小宽度。 宽度的测量方式与[`clientWidth`](https://developer.mozilla.org/zh-CN/docs/Web/API/Element/clientWidth)相同：它包含元素的内边距，但不包括边框，外边距或垂直滚动条（如果存在）。 它还可以包括伪元素的宽度，例如[`::before`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::before)或[`::after`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::after)。 如果元素的内容可以适合而不需要水平滚动条，则其`scrollWidth`等于[`clientWidth`](https://developer.mozilla.org/zh-CN/docs/Web/API/Element/clientWidth)
 
 
 
-https://developer.mozilla.org/zh-CN/docs/Web/API/Element/scrollHeight
+#### 总结上述两个属性：scrollHeight和scrollWidth
 
-https://developer.mozilla.org/zh-CN/docs/Web/API/Element/scrollLeft
+**子元素盒模型内容溢出父元素可视区**
 
-https://developer.mozilla.org/zh-CN/docs/Web/API/Element/scrollTop
+```css
+    div.wrap {
+        height: 200px;
+        width: 200px;
+        overflow: auto;
+        padding-top: 100px;
+        border: 1px solid black;
+    }
+    div.child {
+        height: 100px;
+        width: 500px;
+        background-image: linear-gradient(45deg, blue, green);
+        padding-right: 50px;
+        margin-top: 20px;
+        margin-bottom: 180px;
+    }
+```
 
-https://developer.mozilla.org/zh-CN/docs/Web/API/element/scrollWidth
+**以上示例：**
+
+父元素的可填充区高度：height=300px（如果有横向滚动条，还要减去滚动条的宽度）（不计算父元素的padding-top）
+
+父元素的可填充区宽度：width = 200px（如果有垂直滚动条，还要减去滚动条的宽度）（不计算父元素的padding-left）
+
+子元素的盒模型：盒模型高度=height+margin-top+margin-bottom=100+20+180=300px
+
+​							   盒模型宽度=width+padding-right=500+50=550px
+
+**所以此时：**
+
+```js
+wrap.scrollHeight //不可填充区+填充内容高度=padding-top + 子元素盒模型 = 100 + 300 = 400
+wrap.scrollWidth //不可填充区+填充区内容宽度=0 + 550 = 500
+wrap.clientHeight //元素可视区的高（padding区+content区-横向滚动条的宽如果有）
+wrap.clientWidth // 元素可视区的宽 （padding区+content区 - 纵向滚动条的宽如果有）
+```
+
+**如果填充区未被填满，没有溢出，值如何计算？**
+
+scrollHeight == clientHeight
+
+scrollWidth == clientWidth
 
 
 
@@ -473,15 +602,25 @@ https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollBy
 
 
 
-1Element.clientWidth、
+### 元素的宽高
 
-内联元素以及没有 CSS 样式的元素的 `clientWidth` 属性值为 0。`Element.clientWidth` 属性表示元素的内部宽度，以像素计。该属性包括内边距 padding，但不包括边框 border、外边距 margin 和垂直滚动条（如果有的话）。
+#### （1）Element.clientWidth
+
+`Element.clientWidth` 属性表示元素的内部宽度，以像素计。**——元素的可视区的宽度（padding区+content区 - 纵向滚动条的宽度如果有）**
+
+该属性包括内边距 padding，但不包括边框 border、外边距 margin 和垂直滚动条（如果有的话）。
+
+内联元素以及没有 CSS 样式的元素的 `clientWidth` 属性值为 0。
 
 该属性值会被四舍五入为一个整数。如果你需要一个小数值，可使用 [`element.getBoundingClientRect()`](https://developer.mozilla.org/zh-CN/docs/Web/API/Element/getBoundingClientRect)。
 
-2、Element.clientHeight
 
-这个属性是只读属性，对于没有定义CSS或者内联布局盒子的元素为0，否则，它是元素内部的高度(单位像素)，包含内边距，但不包括水平滚动条、边框和外边距。
+
+#### （2）Element.clientHeight
+
+
+
+这个属性是只读属性，它是元素内部的高度(单位像素)，包含内边距，但不包括水平滚动条、边框和外边距。对于没有定义CSS或者内联布局盒子的元素为0。
 
 `clientHeight` 可以通过 CSS `height` + CSS `padding` - 水平滚动条高度 (如果存在)来计算.
 
@@ -491,23 +630,51 @@ https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollBy
 
 
 
-3、Element.clientLeft
-
-表示一个元素的左边框的宽度，以像素表示。如果元素的文本方向是从右向左（RTL, right-to-left），并且由于内容溢出导致左边出现了一个垂直滚动条，则该属性包括滚动条的宽度。`clientLeft` 不包括左外边距和左内边距。`clientLeft` 是只读的。
+#### 区分：scrollHeight、scrollWidth 和 clientHeight、clientWidth
 
 
 
-4、Element.clientTop
+#### （3）Element.clientLeft 左边框宽度
 
-一个元素顶部边框的宽度（以像素表示）。不包括顶部外边距或内边距。`clientTop` 是只读的。
+表示一个元素的左边框的宽度，以像素表示。
+
+**注意：获取的值是数字类型**
+
+
+
+如果元素的文本方向是从右向左（RTL, right-to-left），并且由于内容溢出导致左边出现了一个垂直滚动条，则该属性包括滚动条的宽度。
+
+
+
+#### （4）Element.clientTop 上边框的宽度
+
+一个元素顶部边框的宽度（以像素表示）。
+
+**注意：获取的值是数字类型**
+
+
 
 https://developer.mozilla.org/zh-CN/docs/Web/API/Element/clientWidth
+
+
+
+#### 区分scrollLeft、scrollTop和 clientLeft 、clientTop
+
+
+
+
 
 
 
 ### 插入HTML：
 
 1Element.insertAdjacentElement()、Element.insertAdjacentHTML()、Element.insertAdjacentText()
+
+
+
+#### Element.insertAdjacentHTML()
+
+元素接口的insertadjacenthhtml()方法将指定的文本解析为HTML或XML，并将结果节点插入到DOM树的指定位置。它不会重新解析它所使用的元素，因此不会破坏该元素中现有的元素。这避免了额外的序列化步骤，使得它比直接的innerHTML操作要快得多。
 
 
 
