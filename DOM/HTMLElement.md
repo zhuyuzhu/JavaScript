@@ -110,11 +110,7 @@ EventTarget：
 
 注意：在 IE 浏览器中，`contenteditable` 不能直接用在 table、tbody、td、th、tr 等标签上。一个可编辑的 span或者 div 标签可以放在表格单元格内部。
 
-
-
 https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLElement/contentEditable
-
-
 
 #### HTMLElement.isContentEditable 
 
@@ -182,7 +178,7 @@ https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dir
 
 
 
-#### HTMLElement.offsetHeight、HMTLElement.offsetWidth
+#### HTMLElement.offsetHeight、HMTLElement.offsetWidth —— border-box的宽高
 
 兼容性IE6
 
@@ -247,9 +243,11 @@ offsetHeight：https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offs
 
 offsetWidth：https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetWidth
 
+
+
+### 定位值属性
+
 #### HTMLElement.offsetParent
-
-
 
 HTMLElement.offsetParent只读属性返回对最接近(在包含层次结构中最接近)**定位的(具有position属性的元素)**祖先元素的引用。如果没有定位的祖先元素，则返回最近的祖先td、th、table，如果没有祖先表元素则返回body。
 
@@ -263,19 +261,13 @@ offsetParent是有用的，因为offsetTop和offsetLeft是相对于它的填充�
 
 HTMLElement.offsetTop只读属性，返回当前元素的外边框相对于offsetParent节点顶部的内边框的距离。
 
-
-
 注意：
 
-如果元素是hidden，他的属性将在Webkit上返回null（元素或者祖先元素的style.display是none）或者 如果元素本身的style.position是fixed
+如果元素是display:none ，他的属性将在Webkit上返回null（元素或者祖先元素的style.display是none）或者 如果元素本身的style.position是fixed
 
 IE9上，这个属性将返回null，如果元素本身的style.position被设置为“fixed”。(使用display:none不会影响此浏览器。)
 
-
-
 https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/innerText
-
-
 
 #### HTMLElement.offsetLeft
 
@@ -293,5 +285,5 @@ https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetLeft
 
 HTMLElement上的事件属性（GlobalEventHandlers接口提供）
 
-大部分都支持IE9，而很多event对IE的支持不是很好。所以可以使用事件属性。
+句柄事件和事件 给元素事件监听提供了多样性。有些事件更适合用句柄事件、有些更适合使用event事件
 
