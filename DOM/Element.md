@@ -4,6 +4,10 @@ Element是最通用的基类，文档中的所有元素对象(即表示元素的
 
 Web平台领域之外的语言，比如通过XULElement接口实现的XUL，也实现了Element。
 
+Element上的属性有两种情况：一种是获取或设置标签上的属性，一种是获取Element对象的属性。
+
+
+
 ### 一、元素标签上的属性
 
 #### 标签属性获取和设置——属性
@@ -300,6 +304,32 @@ document.body.innerHTML = "";
 ```
 
 https://developer.mozilla.org/zh-CN/docs/Web/API/Element/innerHTML
+
+
+
+### 3、HTMLElement.innerText
+
+兼容IE5.5，注意Firefox兼容45
+
+HTMLElement接口的innerText属性表示节点及其后代的“呈现的”文本内容。作为一个getter，它近似于当用户用光标突出显示元素的内容并将其复制到剪贴板时所获得的文本。
+
+**返回值：元素内的可见的文本内容（包括可见的子元素的文本内容）**
+
+innerText很容易与Node.textContent混淆，但两者之间有重要的区别。基本上，innerText知道文本呈现的外观，而textContent则不知道。
+
+https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/innerText
+
+### 4、Node.textContent——兼容IE9
+
+
+
+
+
+https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent
+
+
+
+区别：
 
 
 
@@ -684,6 +714,46 @@ https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentHTML
 
 ### querySelector选择器
 
+**元素接口**的querySelector()方法返回第一个元素，该元素是它所调用的元素的后代，该元素与指定的一组选择器匹配。
+
+一组匹配baseElement的后代元素的选择器;这必须是有效的CSS语法，否则将发生SyntaxError异常。返回找到的第一个与这组选择器匹配的元素。
+
+兼容性：IE9，IE8支持脚注queryselector()，但只支持CSS 2.1选择器。——**CSS2.1的选择器是？？**
+
+**返回值：**
+
+baseElement的第一个后代元素，它匹配指定的一组选择器。匹配时考虑整个元素层次结构，包括元素集合之外的元素(包括baseElement及其后代元素)；
+
+换句话说，选择器首先应用于整个文档，而不是baseElement，以生成潜在元素的初始列表。然后检查产生的元素，以确定它们是否是baseElement的后代。
+
+querySelector()方法返回剩余元素的第一个匹配项。
+
+如果没有找到匹配项，则返回值为null。
+
+Element.querySelector：https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector
+
+示例：因为是元素接口，必须有某个元素调用，获取其内部的某个元素
+
+```html
+    <div class="wrap">
+        <div class="child">123456</div>
+    </div>
+      <input type="text">
+    <script>
+        var wrap = document.getElementsByClassName('wrap')[0]
+        var child = document.getElementsByClassName('child')[0]
+        console.log(wrap.querySelector('div.child').textContent); //123456
+
+    </script>
+```
+
+如果想使用Document来进行选择，可以这样：Document.body.querySelector()
 
 
-https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector
+
+#### Document.querySelector()
+
+Document文档方法querySelector()返回Document中第一个与指定的选择器或一组选择器匹配的元素。如果没有找到匹配项，则返回null
+
+Document.querySelector：https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector
+
