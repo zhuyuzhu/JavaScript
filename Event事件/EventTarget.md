@@ -30,6 +30,8 @@ listener：当所监听的事件类型触发时，会接收到一个事件通知
 
 `useCapture` 可选
 
+事件是否捕获，默认是false（冒泡）如果是true是捕获。
+
 [`Boolean`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Boolean)，在DOM树中，注册了listener的元素， 是否要先于它下面的EventTarget，调用该listener。 当useCapture(设为true) 时，沿着DOM树向上冒泡的事件，不会触发listener。当一个元素嵌套了另一个元素，并且两个元素都对同一事件注册了一个处理函数时，所发生的事件冒泡和事件捕获是两种不同的事件传播方式。事件传播模式决定了元素以哪个顺序接收事件。进一步的解释可以查看 [事件流](http://www.w3.org/TR/DOM-Level-3-Events/#event-flow) 及 [JavaScript Event order](http://www.quirksmode.org/js/events_order.html#link4) 文档。 如果没有指定， `useCapture` 默认为 false 。
 
 
@@ -45,6 +47,8 @@ listener：当所监听的事件类型触发时，会接收到一个事件通知
 dispatchEvent()是创建-初始化-分派流程的最后一步，它用于将事件分派到实现的事件模型中。可以使用事件构造函数创建事件。
 
 https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/dispatchEvent
+
+
 
 ### EventTarget.removeEventListener()
 
@@ -62,10 +66,69 @@ target.removeEventListener(type, listener[, useCapture]);
 
 https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget/removeEventListener
 
+
+
 ### Creating and triggering events
 
 本文演示了如何创建和分派DOM事件。这些事件通常称为**合成事件**，而不是浏览器本身触发的事件。
 
+#### Creating custom event（创建自定义事件）
+
+（1）Event构造函数——兼容性Edge12
+
+事件可以通过Event构造函数创建一个自定义事件
+
+```js
+const event = new Event('build');
+// Listen for the event.
+elem.addEventListener('build', function (e) { /* ... */ }, false);
+// Dispatch the event.
+elem.dispatchEvent(event);
+```
+
+（1）document.createEvent() 和 Event.initEvent() 
+
+由document.createEvent()方法创建一个event实例，实例调用initEvent方法创建自定义事件。
+
+```js
+    var customEvent = document.createEvent('Event');
+    // Define that the event name is 'build'.
+    customEvent.initEvent('build', true, true);
+```
+
+initEvent的兼容性IE11
+
+event.initevent()方法用于初始化使用Document.createEvent()创建的事件的值。
+
+语法：
+
+```js
+event.initEvent(type, bubbles, cancelable);
+```
+
+type：自定义的事件类型，字符串值
+
+bubbles：是一个布尔值，决定事件是否应该在事件链中向上冒泡。一旦设置，只读属性事件。泡沫将赋予它价值。
+
+cancelable：是一个布尔值，定义是否可以取消事件。一旦设置，只读属性事件。cancelable会给出它的值。
+
+
+
+在Firefox 17之前，在事件分派之后调用这个方法会引发异常，而不是什么都不做。
+
+**Deprecated：**不推荐使用此功能。尽管一些浏览器可能仍然支持它，但它可能已经从相关的web标准中删除，可能正在被删除的过程中，或者可能只是为了兼容而保留。避免使用它，并在可能的情况下更新现有代码;请参阅本页底部的兼容性表，以指导您的决定。请注意，此功能可能在任何时候停止工作。
+
+https://developer.mozilla.org/en-US/docs/Web/API/Event/initEvent
+
+
+
+自定义事件：CustomEvent.initCustomEvent 
+
+https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/initCustomEvent
+
+
+
 
 
 https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events
+
