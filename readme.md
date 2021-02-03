@@ -14,7 +14,9 @@ Element、HTMLElement、Document、元素句柄事件（GlobalEventHandlers）
 
 兼容性、使用方式等不同，结合实际情况和事件本身，选择更合适的对象上的事件，来进行监听和使用。
 
+#### EventTarget文档
 
+对事件的监听、触发、移除的方法，以及对自定义事件的深入探讨。
 
 ### DOM文件夹
 

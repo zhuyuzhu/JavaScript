@@ -162,24 +162,28 @@ function addElement () {
 }
 ```
 
-
-
 https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement
+
+
 
 #### document.createEvent()
 
+> 与createEvent一起使用的许多方法，如initCustomEvent，都已弃用。使用事件构造函数代替。
+
 创建指定类型的事件。返回的对象应该首先初始化，然后可以传递给EventTarget.dispatchEvent。
 
-语法：
+**语法：**事件类型接口，比如：Event、CustomEvent
 
 ```js
 var event = document.createEvent(type);
 ```
 
-- event 是创建的事件对象。
-- 是表示要创建的事件类型的字符串。可能的事件类型包括`"UIEvents"`, `"MouseEvents"`, `"MutationEvents"`, and `"HTMLEvents"`
+- event 是创建的事件对象实例。
+- 是表示要创建的事件接口类型的字符串。可能的事件类型包括`"UIEvent"`, `"MouseEvent"`, `"MutationEvent"`, and `"HTMLEvent"`
 
-示例：创建一个事件，在某个元素上监听该类型的事件，当达到某个条件后触发该事件。
+**注意：**传入不同的事件接口类型，这样得到的事件实例对象就可以额外的添加一些属性值。比如MouseEvent接口类型，会有鼠标的相关属性。
+
+**示例：**创建一个事件，在某个元素上监听该类型的事件，当达到某个条件后触发该事件。
 
 ```js
 // Create the event.
@@ -197,9 +201,24 @@ elem.addEventListener('build', function (e) {
 elem.dispatchEvent(event);
 ```
 
-注意：
+**注意：**DOM标准中列出了适合传递给createEvent()的事件类型字符串-参见步骤2中的表。请记住，现在大多数事件对象都有构造函数，这是现代推荐的创建事件对象实例的方法。
 
-DOM标准中列出了适合传递给createEvent()的事件类型字符串-参见步骤2中的表。请记住，现在大多数事件对象都有构造函数，这是现代推荐的创建事件对象实例的方法。
+**常用事件接口类型如下：**
+
+- [`ClipboardEvent`](https://developer.mozilla.org/zh-CN/docs/Web/API/ClipboardEvent)
+- [`CustomEvent`](https://developer.mozilla.org/zh-CN/docs/Web/API/CustomEvent)
+- [`DragEvent`](https://developer.mozilla.org/zh-CN/docs/Web/API/DragEvent)
+- [`ErrorEvent`](https://developer.mozilla.org/zh-CN/docs/Web/API/ErrorEvent)
+- [`FocusEvent`](https://developer.mozilla.org/zh-CN/docs/Web/API/FocusEvent)
+- [`InputEvent`](https://developer.mozilla.org/zh-CN/docs/Web/API/InputEvent)
+- [`KeyboardEvent`](https://developer.mozilla.org/zh-CN/docs/Web/API/KeyboardEvent)
+- [`MouseEvent`](https://developer.mozilla.org/zh-CN/docs/Web/API/MouseEvent)
+- [`ProgressEvent`](https://developer.mozilla.org/zh-CN/docs/Web/API/ProgressEvent)
+- [`TouchEvent`](https://developer.mozilla.org/zh-CN/docs/Web/API/TouchEvent)
+- [`UIEvent`](https://developer.mozilla.org/zh-CN/docs/Web/API/UIEvent)
+- [`WheelEvent`](https://developer.mozilla.org/zh-CN/docs/Web/API/WheelEvent)
+
+具体的请查看：https://developer.mozilla.org/zh-CN/docs/Web/API/Event#%E5%9F%BA%E4%BA%8E_event_%E7%9A%84%E6%8E%A5%E5%8F%A3
 
 Firefox，从67版开始，不再支持使用这种方法创建touch触摸事件。
 
@@ -211,6 +230,8 @@ Gecko支持一些非标准的事件对象别名，如下所示：
 | Keyboard event module | `KeyboardEvent`       | `KeyEvents`         |
 | Basic events module   | `Event`               | `Events`            |
 
+Document.createEvent地址：https://developer.mozilla.org/en-US/docs/Web/API/Document/createEvent
+
 ##### 额外补充：监听和触发事件——可查看EventTarget对象
 
 监听事件：addEventListener
@@ -218,6 +239,10 @@ Gecko支持一些非标准的事件对象别名，如下所示：
 触发事件：dispatchEvent
 
 https://developer.mozilla.org/en-US/docs/Web/API/EventTarget
+
+**使用特点：使用document.createEvent创建一个事件实例对象，再对该事件实例对象进行初始化，使用addEventListener对事件进行监听。EventTarget.dispatchEvent()方法来触发该事件实例对象。**
+
+
 
 #### document.getElementById()
 
