@@ -96,8 +96,6 @@ EventTarget：
 
 
 
-
-
 #### HTMLElement.contentEditable——标签属性
 
 兼容性IE6
